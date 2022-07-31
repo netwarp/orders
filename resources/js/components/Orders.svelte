@@ -37,9 +37,9 @@
     }
 </script>
 
-<h3>{type}</h3>
 
-<div class="my-4">
+<div class="my-4 bg-white p-4 rounded">
+    <h3>{type}</h3>
     <form on:submit|preventDefault={handleForm}>
         <div class="row">
             <div class="col">
@@ -55,7 +55,7 @@
     </form>
 </div>
 
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped bg-white">
     <thead>
         <tr>
             <th>Quantity</th>

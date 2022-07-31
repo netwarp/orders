@@ -1,6 +1,5 @@
 import Order from '../../models/Order.mjs'
-import tradeOgre from "../../services/tradeogre.mjs";
-import tradeogre from "../../services/tradeogre.mjs";
+import tradeOgre from "../../services/tradeogre.mjs"
 
 export async function orders(request, response) {
 
@@ -18,7 +17,9 @@ export async function postOrder(request, response) {
     const price = request.body.price
     const quantity = request.body.quantity
 
-    const order = {
+    console.log(request.body)
+
+    const orderDB = {
         type,
         price,
         quantity,
@@ -33,12 +34,43 @@ export async function postOrder(request, response) {
         price
     }
 
-    if (type === 'buy') {
+    const orderMarket =  await tradeOgre[type](marketParams.market, marketParams.quantity, marketParams.price)
 
+    if (orderMarket.success) {
+        orderDB.success = true
+        orderDB.uuid = orderMarket.uuid
     }
 
-    response.json({
-        price,
-        quantity
+    await Order.create(orderDB)
+
+    response.json(orderDB)
+}
+
+export async function refresh(request, response) {
+    const orders = await Order.find({
+        status: 'pending'
     })
+
+    const ordersUpdated = []
+
+    for await (const order of orders) {
+        let stillPending = await tradeOgre.order(order.uuid)
+        stillPending = stillPending.success
+
+
+        if ( ! stillPending) {
+            await Order.findOneAndUpdate(
+                {
+                    uuid: order.uuid
+                },
+                {
+                    status: 'completed'
+                }
+            )
+
+            ordersUpdated.push(order)
+        }
+    }
+
+    response.json(ordersUpdated)
 }

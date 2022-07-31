@@ -29,7 +29,7 @@
     "nunjucks": "^3.2.3",
     "redis": "^4.2.0",
     "svelte": "^3.49.0",
-    "tradeogre-lib": "^1.0.0"
+    "tradeogre-lib": "^1.0.3"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",

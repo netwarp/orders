@@ -27,5 +27,7 @@ app.get('/', (request, response) => {
 import * as ApiController from './controllers/API/ApiController.mjs'
 app.get('/api/orders', ApiController.orders)
 app.post('/api/post-order', ApiController.postOrder)
+app.get('/api/orders/refresh', ApiController.refresh)
+
 
 app.listen(8080, () => console.log('localhost:8080'))
