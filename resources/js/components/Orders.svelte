@@ -35,6 +35,20 @@
         quantity = ''
         price = ''
     }
+
+    async function preFill() {
+
+        const response = await axios.get('/api/orders/prefill', {
+            params: {
+                type
+            }
+        })
+
+        const priceApi = response.data
+
+        quantity = 0.01
+        price = priceApi
+    }
 </script>
 
 
@@ -42,6 +56,9 @@
     <h3>{type}</h3>
     <form on:submit|preventDefault={handleForm}>
         <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-secondary" on:click={preFill}>Prefill</button>
+            </div>
             <div class="col">
                 <input type="text" class="form-control" placeholder="quantity" bind:value={quantity}>
             </div>

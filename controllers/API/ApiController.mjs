@@ -74,3 +74,18 @@ export async function refresh(request, response) {
 
     response.json(ordersUpdated)
 }
+
+export async function prefill(request, response) {
+    const type = request.query.type
+
+    let orders = await tradeOgre.ordersBook('BTC-XMR')
+    orders = orders[type]
+
+    orders = Object.keys(orders)
+
+    const index = type === 'buy' ? -3 : 3
+
+    const order = orders.at(index)
+
+    response.json(order)
+}
