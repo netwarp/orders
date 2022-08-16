@@ -39,6 +39,7 @@ export async function postOrder(request, response) {
     if (orderMarket.success) {
         orderDB.success = true
         orderDB.uuid = orderMarket.uuid
+        orderDB.date = orderMarket.date
     }
 
     await Order.create(orderDB)
@@ -83,9 +84,23 @@ export async function prefill(request, response) {
 
     orders = Object.keys(orders)
 
-    const index = type === 'buy' ? -3 : 3
+    const index = type === 'buy' ? -4 : 4
 
     const order = orders.at(index)
+
+    response.json(order)
+}
+
+export async function pending(request, response) {
+    const orders = await Order.find({
+        status: 'pending'
+    })
+
+    response.json(orders)
+}
+
+export async function latest(request, response) {
+    const order = await Order.findOne().sort({ _id: -1})
 
     response.json(order)
 }
